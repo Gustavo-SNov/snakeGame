@@ -6,11 +6,8 @@
 #define MOVEMENT_H
 
 struct Movement {
-    float speed = 0.1f;
     float movX = 0.0f;
     float movY = 0.0f;
-    bool horizontal = false;
-    bool vertical = false;
 };
 
 #endif //MOVEMENT_H

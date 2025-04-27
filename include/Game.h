@@ -5,11 +5,13 @@
 #ifndef GAME_CPP_H
 #define GAME_CPP_H
 
-#include "Snake.h"
-#include "Movement.h"
-
 #include <GLFW/glfw3.h>
 #include <vector>
+
+#include "Snake.h"
+#include "Food.h"
+#include "struct/Movement.h"
+
 using namespace std;
 
 struct Board {
@@ -27,17 +29,12 @@ struct Board {
 struct Config {
     bool gameStart = false;
     bool gameOver = false;
+    float gameSpeed = 1.0f;
 };
-
-
-
-
-
-
 
 class Game {
     static Snake snake;
-
+    static Food food;
     static Board board;
     static Config config;
     static Movement movement;
@@ -48,9 +45,12 @@ class Game {
 public:
     void render();
     static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
+    static bool snakeEatedFood();
     [[nodiscard]] Config getConfig() const {
       return this->config;
     }
+
+
 };
 
 #endif //GAME_CPP_H

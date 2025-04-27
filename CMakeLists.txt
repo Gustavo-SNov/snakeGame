@@ -7,6 +7,8 @@ include_directories(
         C:/libs_c++/GLFW/include
         C:/libs_c++/GLAD/include
         ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/include/struct
+        ${PROJECT_SOURCE_DIR}/include/enums
 )
 link_directories(
         C:/libs_c++/GLFW/lib

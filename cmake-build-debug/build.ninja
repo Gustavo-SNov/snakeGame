@@ -49,31 +49,38 @@ cmake_ninja_workdir = C$:/workspaces/snakeGame/cmake-build-debug/
 
 build cmake_object_order_depends_target_snakeGame: phony || .
 
+build CMakeFiles/snakeGame.dir/src/Food.cpp.obj: CXX_COMPILER__snakeGame_unscanned_Debug C$:/workspaces/snakeGame/src/Food.cpp || cmake_object_order_depends_target_snakeGame
+  DEP_FILE = CMakeFiles\snakeGame.dir\src\Food.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -IC:/libs_c++/GLFW/include -IC:/libs_c++/GLAD/include -IC:/workspaces/snakeGame/include -IC:/workspaces/snakeGame/include/struct -IC:/workspaces/snakeGame/include/enums
+  OBJECT_DIR = CMakeFiles\snakeGame.dir
+  OBJECT_FILE_DIR = CMakeFiles\snakeGame.dir\src
+
 build CMakeFiles/snakeGame.dir/src/Game.cpp.obj: CXX_COMPILER__snakeGame_unscanned_Debug C$:/workspaces/snakeGame/src/Game.cpp || cmake_object_order_depends_target_snakeGame
   DEP_FILE = CMakeFiles\snakeGame.dir\src\Game.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -IC:/libs_c++/GLFW/include -IC:/libs_c++/GLAD/include -IC:/workspaces/snakeGame/include
+  INCLUDES = -IC:/libs_c++/GLFW/include -IC:/libs_c++/GLAD/include -IC:/workspaces/snakeGame/include -IC:/workspaces/snakeGame/include/struct -IC:/workspaces/snakeGame/include/enums
   OBJECT_DIR = CMakeFiles\snakeGame.dir
   OBJECT_FILE_DIR = CMakeFiles\snakeGame.dir\src
 
 build CMakeFiles/snakeGame.dir/src/Renderer.cpp.obj: CXX_COMPILER__snakeGame_unscanned_Debug C$:/workspaces/snakeGame/src/Renderer.cpp || cmake_object_order_depends_target_snakeGame
   DEP_FILE = CMakeFiles\snakeGame.dir\src\Renderer.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -IC:/libs_c++/GLFW/include -IC:/libs_c++/GLAD/include -IC:/workspaces/snakeGame/include
+  INCLUDES = -IC:/libs_c++/GLFW/include -IC:/libs_c++/GLAD/include -IC:/workspaces/snakeGame/include -IC:/workspaces/snakeGame/include/struct -IC:/workspaces/snakeGame/include/enums
   OBJECT_DIR = CMakeFiles\snakeGame.dir
   OBJECT_FILE_DIR = CMakeFiles\snakeGame.dir\src
 
 build CMakeFiles/snakeGame.dir/src/Snake.cpp.obj: CXX_COMPILER__snakeGame_unscanned_Debug C$:/workspaces/snakeGame/src/Snake.cpp || cmake_object_order_depends_target_snakeGame
   DEP_FILE = CMakeFiles\snakeGame.dir\src\Snake.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -IC:/libs_c++/GLFW/include -IC:/libs_c++/GLAD/include -IC:/workspaces/snakeGame/include
+  INCLUDES = -IC:/libs_c++/GLFW/include -IC:/libs_c++/GLAD/include -IC:/workspaces/snakeGame/include -IC:/workspaces/snakeGame/include/struct -IC:/workspaces/snakeGame/include/enums
   OBJECT_DIR = CMakeFiles\snakeGame.dir
   OBJECT_FILE_DIR = CMakeFiles\snakeGame.dir\src
 
 build CMakeFiles/snakeGame.dir/src/main.cpp.obj: CXX_COMPILER__snakeGame_unscanned_Debug C$:/workspaces/snakeGame/src/main.cpp || cmake_object_order_depends_target_snakeGame
   DEP_FILE = CMakeFiles\snakeGame.dir\src\main.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -IC:/libs_c++/GLFW/include -IC:/libs_c++/GLAD/include -IC:/workspaces/snakeGame/include
+  INCLUDES = -IC:/libs_c++/GLFW/include -IC:/libs_c++/GLAD/include -IC:/workspaces/snakeGame/include -IC:/workspaces/snakeGame/include/struct -IC:/workspaces/snakeGame/include/enums
   OBJECT_DIR = CMakeFiles\snakeGame.dir
   OBJECT_FILE_DIR = CMakeFiles\snakeGame.dir\src
 
@@ -85,7 +92,7 @@ build CMakeFiles/snakeGame.dir/src/main.cpp.obj: CXX_COMPILER__snakeGame_unscann
 #############################################
 # Link the executable snakeGame.exe
 
-build snakeGame.exe: CXX_EXECUTABLE_LINKER__snakeGame_Debug CMakeFiles/snakeGame.dir/src/Game.cpp.obj CMakeFiles/snakeGame.dir/src/Renderer.cpp.obj CMakeFiles/snakeGame.dir/src/Snake.cpp.obj CMakeFiles/snakeGame.dir/src/main.cpp.obj
+build snakeGame.exe: CXX_EXECUTABLE_LINKER__snakeGame_Debug CMakeFiles/snakeGame.dir/src/Food.cpp.obj CMakeFiles/snakeGame.dir/src/Game.cpp.obj CMakeFiles/snakeGame.dir/src/Renderer.cpp.obj CMakeFiles/snakeGame.dir/src/Snake.cpp.obj CMakeFiles/snakeGame.dir/src/main.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lglfw3  -lopengl32  -lgdi32  -lglu32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   LINK_PATH = -LC:/libs_c++/GLFW/lib   -LC:/libs_c++/GLAD/lib

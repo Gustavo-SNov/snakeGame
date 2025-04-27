@@ -3,49 +3,114 @@
 //
 #include "Snake.h"
 #include <vector>
+#include <algorithm>
+#include <iostream>
 #include <GLFW/glfw3.h>
+#include <GL/gl.h>
 using namespace std;
 
+float Snake::size = 1.0f;
+
 Snake::Snake() {
-    this->head = {
-        {0.0f, 0.0f},
-        {size, 0.0f},
-        {size, size},
-        {0.0f, size}
-    };
+    this->body.emplace_back(Body{
+        {{-0.5f, 0.5f}, {0.5f, 0.5f}, {0.5f, -0.5f}, {-0.5f, -0.5f}},
+        Movement(), // posição da cabeça
+        Direction::NONE,
+        true
+    });
+
+    this->body.emplace_back(Body{
+        {{-0.5f, 0.5f-size}, {0.5f, 0.5f-size}, {0.5f, -0.5f-size}, {-0.5f, -0.5f-size}},
+        Movement(), // posição atrás da cabeça no eixo X
+        Direction::NONE,
+        false
+    });
+
     this->direction = NONE;
 }
 
 void Snake::render() {
-    glBegin(GL_QUADS);
-    glColor3f(1.0, 0.0, 0.0);
-    for (auto i: this->head) {
-        glVertex2f(i[0], i[1]);
+    for (auto &b: this->body) {
+        glPushMatrix();
+        glTranslatef(b.movement.movX, b.movement.movY, 0.0f);
+        glBegin(GL_QUADS);
+        glColor3f(1.0, 0.0, 0.0);
+        for (auto v: b.vertices) {
+            glVertex2f(v[0], v[1]);
+        }
+        glEnd();
+        glPopMatrix();
     }
-    glEnd();
 }
 
-void Snake::setMovement(Movement& movement) {
+void Snake::moveSnake(float speed, vector<float>& foodCenter) {
+
+    auto &head = body[0];
+    vector<vector<float>> oldHeadPoints = head.vertices;
+    Movement oldMovement = head.movement;
     switch (this->direction) {
         case UP:
-            movement.movY += movement.speed;
+            head.movement.movY += speed;
             break;
         case DOWN:
-            movement.movY -= movement.speed;
+            head.movement.movY -= speed;
             break;
         case LEFT:
-            movement.movX += movement.speed;
+            head.movement.movX -= speed;
             break;
         case RIGHT:
-            movement.movX -= movement.speed;
+            head.movement.movX += speed;
+            break;
+        default:
+            break;
+    }
+    for (int i = 1; i < body.size(); ++i) {
+        vector<vector<float>> tempVertices = body[i].vertices;
+        Movement tempMovement = body[i].movement;
+
+        body[i].vertices = oldHeadPoints;
+        body[i].movement = oldMovement;
+
+        oldHeadPoints = tempVertices;
+        oldMovement = tempMovement;
+    }
+}
+
+void Snake::growBody() {
+    Body newTail = this->body.back();
+    switch (newTail.direction) {
+        case UP:
+            for (auto &v: newTail.vertices) {
+                v[1] -= size;
+            }
+            break;
+        case DOWN:
+            for (auto &v: newTail.vertices) {
+                v[1] += size;
+            }
+            break;
+        case LEFT: for (auto &v: newTail.vertices) {
+                v[0] += size;
+            }
+
+            break;
+        case RIGHT:
+            for (auto &v: newTail.vertices) {
+                v[0] -= size;
+            }
             break;
         case NONE:
             break;
     }
+
+    this->body.emplace_back(newTail);
 }
 
+
 bool Snake::verifyCollision(float limitMax, float limitMin, float x, float y) {
-    for (auto v: this->head) {
+    Body head = this->body[0];
+
+    for (auto v: head.vertices) {
         float limitX = v[0] + x;
         float limitY = v[1] + y;
         if (limitX > limitMax || limitX < limitMin) {
