@@ -5,6 +5,7 @@
 #ifndef GAME_CPP_H
 #define GAME_CPP_H
 
+#include <algorithm>
 #include <GLFW/glfw3.h>
 #include <vector>
 
@@ -15,14 +16,15 @@
 using namespace std;
 
 struct Board {
-    float lineWidth = 4.0f;
-    float size = 10.0f;
-    float zoom = 15.0f;
+    float lineSize = 4.0f;
+    float height = 20.0f;
+    float width = 20.0f;
+    float size = 20.0f;
     vector<vector<float> > board = {
-        {size, size},
-        {-size, size},
-        {-size, -size},
-        {size, -size}
+        {width, height},
+        {-width, height},
+        {-width, -height},
+        {width, -height}
     };
 };
 
@@ -30,6 +32,7 @@ struct Config {
     bool gameStart = false;
     bool gameOver = false;
     float gameSpeed = 1.0f;
+    float timeSpeed = 0.1f;
 };
 
 class Game {
@@ -38,7 +41,7 @@ class Game {
     static Board board;
     static Config config;
     static Movement movement;
-    int points = 0;
+    static int points;
 
     static void drawBoard();
 
@@ -46,10 +49,16 @@ public:
     void render();
     static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
     static bool snakeEatedFood();
-    [[nodiscard]] Config getConfig() const {
-      return this->config;
+    static void resetGame();
+    [[nodiscard]] static Config getConfig() {
+      return config;
     }
-
+    static int getPoints() {
+        return static_cast<int>(snake.getBody().size()-1);
+    }
+    static void moreSpeed() {
+        config.timeSpeed -= 0.005f;
+    }
 
 };
 

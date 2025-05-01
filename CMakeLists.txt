@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 include_directories(
         C:/libs_c++/GLFW/include
         C:/libs_c++/GLAD/include
+        C:/libs_c++/STB/include
         ${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/include/struct
         ${PROJECT_SOURCE_DIR}/include/enums
@@ -28,4 +29,5 @@ target_link_libraries(snakeGame
         opengl32
         gdi32
         glu32
+
 )

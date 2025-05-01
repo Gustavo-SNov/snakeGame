@@ -17,11 +17,12 @@ class Food {
 public:
     Food() {
         this->radius = 0.5f;
-        this->center = {0.0f, 5.0f}; // ADICIONAR ISSO!!
+        this->center = {0.0f, 5.0f};
         this->eated = false;
     }
 
     void render();
+    void generateNewPosition(float boardWidth, float boardHeight);
 
     vector<float> &getCenter() {
         return this->center;

@@ -1,19 +1,19 @@
-//
-// Created by Gustavo Novais on 26/04/2025.
-//
+
+#define STB_EASY_FONT_IMPLEMENTATION
+
 #include "Renderer.h"
 #include <iostream>
 #include <GLFW/glfw3.h>
 #include <GL/gl.h>
-#include <functional>
-#include <vector>
+#include "stb_easy_font.h"
+
 using namespace std;
 
 // Em C++, variáveis "static" de classe precisam ser definidas fora da classe também.
 float Renderer::x = 0.0f;
 float Renderer::y = 0.0f;
 float Renderer::step = 1.0f;
-float Renderer::zoom = 15.0f;
+float Renderer::zoom = 40.0f;
 
 void Renderer::initialize() {
     // Ajuste de Projeção Ortográfica(2D)
@@ -54,14 +54,36 @@ void Renderer::render(Game& game) {
     while (!glfwWindowShouldClose(window)) {
 
         initialize();
-        // direction.gameStart = x > 0.0f || y > 0.0f;
-        // if (!direction.gameStart) {
-        //     glfwSetTime(0.0);
-        // }
 
         game.render();
+        glPushMatrix();
+        glTranslatef(-20.0f, 30.0f, 0.0f);
+        glScalef(1.0f, -1.0f, 1.0f);
+        glTranslatef(23.0f, -23.0f, 0.0f);
+        char text[128];
+        snprintf(text, sizeof(text), "Score: %d", game.getPoints()); // Supondo que você tenha esse campo
+
+        char buffer[99999]; // memória para o texto
+        int num_quads = stb_easy_font_print(
+            -23,  // posição X (esquerda da tela)
+            23,   // posição Y (topo da tela)
+            text,
+            nullptr,    // cor padrão (branca)
+            buffer,
+            sizeof(buffer)
+        );
+
+        glColor3f(1, 1, 1); // cor branca
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(2, GL_FLOAT, 16, buffer);
+        glDrawArrays(GL_QUADS, 0, num_quads * 4);
+        glDisableClientState(GL_VERTEX_ARRAY);
+
+        glPopMatrix();
         if (game.getConfig().gameOver) {
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
+            //glfwSetWindowShouldClose(window, GLFW_TRUE);
+
+            game.resetGame();
         }
 
         // Resetar transformações para evitar acumulação

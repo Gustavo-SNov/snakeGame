@@ -6,17 +6,6 @@
 
 using namespace std;
 
-void draw() {
-    glBegin(GL_QUADS);
-    glColor3f(1.0, 0.0, 0.0);
-    glVertex2f(0.0, 0.0);
-    glVertex2f(1.0, 0.0);
-    glVertex2f(1.0, 1.0);
-    glVertex2f(0.0, 1.0);
-    glEnd();
-}
-
-
 int main() {
 
     Game game;

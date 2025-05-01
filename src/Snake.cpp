@@ -1,9 +1,8 @@
-//
-// Created by Gustavo Novais on 26/04/2025.
-//
+#define EPSILON 0.001f // float com margem de erro
 #include "Snake.h"
 #include <vector>
 #include <algorithm>
+#include <Game.h>
 #include <iostream>
 #include <GLFW/glfw3.h>
 #include <GL/gl.h>
@@ -13,18 +12,20 @@ float Snake::size = 1.0f;
 
 Snake::Snake() {
     this->body.emplace_back(Body{
-        {{-0.5f, 0.5f}, {0.5f, 0.5f}, {0.5f, -0.5f}, {-0.5f, -0.5f}},
+        {
+            {-0.5f, 0.5f}, // A
+            {0.5f, 0.5f}, // B
+            {0.5f, -0.5f}, // C
+            {-0.5f, -0.5f} // D
+        },
         Movement(), // posição da cabeça
         Direction::NONE,
         true
+
     });
 
-    this->body.emplace_back(Body{
-        {{-0.5f, 0.5f-size}, {0.5f, 0.5f-size}, {0.5f, -0.5f-size}, {-0.5f, -0.5f-size}},
-        Movement(), // posição atrás da cabeça no eixo X
-        Direction::NONE,
-        false
-    });
+    // A B
+    // D C
 
     this->direction = NONE;
 }
@@ -34,7 +35,7 @@ void Snake::render() {
         glPushMatrix();
         glTranslatef(b.movement.movX, b.movement.movY, 0.0f);
         glBegin(GL_QUADS);
-        glColor3f(1.0, 0.0, 0.0);
+        glColor3f(0.0, 1.0, 0.0);
         for (auto v: b.vertices) {
             glVertex2f(v[0], v[1]);
         }
@@ -43,10 +44,9 @@ void Snake::render() {
     }
 }
 
-void Snake::moveSnake(float speed, vector<float>& foodCenter) {
-
+void Snake::moveSnake(float speed) {
     auto &head = body[0];
-    vector<vector<float>> oldHeadPoints = head.vertices;
+    vector<vector<float> > oldHeadPoints = head.vertices;
     Movement oldMovement = head.movement;
     switch (this->direction) {
         case UP:
@@ -65,7 +65,7 @@ void Snake::moveSnake(float speed, vector<float>& foodCenter) {
             break;
     }
     for (int i = 1; i < body.size(); ++i) {
-        vector<vector<float>> tempVertices = body[i].vertices;
+        vector<vector<float> > tempVertices = body[i].vertices;
         Movement tempMovement = body[i].movement;
 
         body[i].vertices = oldHeadPoints;
@@ -77,48 +77,77 @@ void Snake::moveSnake(float speed, vector<float>& foodCenter) {
 }
 
 void Snake::growBody() {
-    Body newTail = this->body.back();
-    switch (newTail.direction) {
+    Body tail = this->body.back();
+    Body newTail = Body();
+    float x = 0.0f, y = 0.0f;
+    switch (this->direction) {
         case UP:
-            for (auto &v: newTail.vertices) {
-                v[1] -= size;
-            }
+            y = -size;
             break;
         case DOWN:
-            for (auto &v: newTail.vertices) {
-                v[1] += size;
-            }
+            y = size;
             break;
-        case LEFT: for (auto &v: newTail.vertices) {
-                v[0] += size;
-            }
-
+        case LEFT:
+            x = -size;
             break;
         case RIGHT:
-            for (auto &v: newTail.vertices) {
-                v[0] -= size;
-            }
+            x = size;
             break;
-        case NONE:
-            break;
+        default:
+            return;
     }
+    cout << "Vertices: " << endl;
+
+    for (auto &v: tail.vertices) {
+        vector<float> newVertices = {v[0] + x, v[1] + y};
+        newTail.vertices.push_back(newVertices);
+    }
+    newTail.isHead = false;
+    //newTail.movement = Movement();
+    newTail.movement = tail.movement;
+    newTail.direction = NONE;
 
     this->body.emplace_back(newTail);
 }
 
 
-bool Snake::verifyCollision(float limitMax, float limitMin, float x, float y) {
-    Body head = this->body[0];
+bool Snake::verifyCollision(float widthLimit, float heigthLimit) const {
+    Body head = getHead();
+    vector<float> headCenter = getCenter(head);
 
-    for (auto v: head.vertices) {
-        float limitX = v[0] + x;
-        float limitY = v[1] + y;
-        if (limitX > limitMax || limitX < limitMin) {
-            return true;
-        }
-        if (limitY > limitMax || limitY < limitMin) {
-            return true;
-        }
+    if (headCenter[0] > widthLimit || headCenter[0] < -widthLimit
+        || headCenter[1] > heigthLimit || headCenter[1] < -heigthLimit) {
+        cout << "Colidiu Borda" << endl;
+        cout << "Head Center: " << headCenter[0] << " " << headCenter[1] << endl;
+        cout << "Centro Head  ( " << widthLimit << ", " << heigthLimit << " )" << endl;
+        return true;
     }
+
+    for (int i = 4; i < body.size(); ++i) { // Começa do 1 para ignorar a cabeça
+        vector<float> segmentCenter = getCenter(body[i]);
+
+        if (abs(headCenter[0] - segmentCenter[0]) < EPSILON &&
+            abs(headCenter[1] - segmentCenter[1]) < EPSILON) {
+            cout << "Colidiu com corpo!" << endl;
+            return true;
+            }
+    }
+    // for (int i = 4; i < body.size(); ++i) {
+    //     vector<float> center = getCenter(body[i]);
+    //     if (headCenter[0] == center[0] && headCenter[1] == center[1]) {
+    //         cout << "Colidiu com Corpo" << endl;
+    //         cout << "Head info:" << endl;
+    //         for (auto &v: head.vertices) {
+    //             cout << "(" << v[0] << ", " << v[1] << ") ";
+    //         }
+    //         cout << endl << "Head Center: " << headCenter[0] << " " << headCenter[1] << endl;
+    //         cout << "Centro <<" << i << " ( " << center[0] << ", " << center[1] << " )" << endl;
+    //         for (auto &v: body[i].vertices) {
+    //             cout << "(" << v[0] << ", " << v[1] << ") ";
+    //         }
+    //         return true;
+    //     }
+    // }
+    // Corpo da Cobra
     return false;
 }
