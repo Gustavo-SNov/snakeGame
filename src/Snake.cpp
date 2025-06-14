@@ -132,22 +132,6 @@ bool Snake::verifyCollision(float widthLimit, float heigthLimit) const {
             return true;
             }
     }
-    // for (int i = 4; i < body.size(); ++i) {
-    //     vector<float> center = getCenter(body[i]);
-    //     if (headCenter[0] == center[0] && headCenter[1] == center[1]) {
-    //         cout << "Colidiu com Corpo" << endl;
-    //         cout << "Head info:" << endl;
-    //         for (auto &v: head.vertices) {
-    //             cout << "(" << v[0] << ", " << v[1] << ") ";
-    //         }
-    //         cout << endl << "Head Center: " << headCenter[0] << " " << headCenter[1] << endl;
-    //         cout << "Centro <<" << i << " ( " << center[0] << ", " << center[1] << " )" << endl;
-    //         for (auto &v: body[i].vertices) {
-    //             cout << "(" << v[0] << ", " << v[1] << ") ";
-    //         }
-    //         return true;
-    //     }
-    // }
-    // Corpo da Cobra
+
     return false;
 }

@@ -8,6 +8,8 @@
 #include <vector>
 #include <GLFW/glfw3.h>
 #include <GL/gl.h>
+#define STB_EASY_FONT_IMPLEMENTATION
+#include "stb_easy_font.h"
 using namespace std;
 
 Snake Game::snake;
@@ -147,4 +149,59 @@ void Game::resetGame() {
     snake = Snake();
     food = Food();
     points = 0;
+}
+
+void Game::drawScore() {
+
+    glPushMatrix();
+    glTranslatef(-20.0f, 30.0f, 0.0f);
+    glScalef(1.0f, -1.0f, 1.0f);
+    glTranslatef(23.0f, -23.0f, 0.0f);
+    char text[128];
+    snprintf(text, sizeof(text), "Score: %d", getPoints()); // Supondo que você tenha esse campo
+
+    char buffer[99999]; // memória para o texto
+    int num_quads = stb_easy_font_print(
+        -23,  // posição X (esquerda da tela)
+        23,   // posição Y (topo da tela)
+        text,
+        nullptr,    // cor padrão (branca)
+        buffer,
+        sizeof(buffer)
+    );
+
+    glColor3f(1, 1, 1); // cor branca
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(2, GL_FLOAT, 16, buffer);
+    glDrawArrays(GL_QUADS, 0, num_quads * 4);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glPopMatrix();
+}
+
+void Game::drawRank() {
+    glPushMatrix();
+    // glTranslatef(-20.0f, 30.0f, 0.0f);
+    glTranslatef(30.0f, 30.0f, 0.0f);
+    glScalef(0.5f, 0.5f, 1.0f);
+    glScalef(1.0f, -1.0f, 1.0f);
+    // glTranslatef(23.0f, -23.0f, 0.0f);
+    char text[128];
+    snprintf(text, sizeof(text), "Ranking: "); // Supondo que você tenha esse campo
+
+    char buffer[99999]; // memória para o texto
+    int num_quads = stb_easy_font_print(
+        -23,  // posição X (esquerda da tela)
+        23,   // posição Y (topo da tela)
+        text,
+        nullptr,    // cor padrão (branca)
+        buffer,
+        sizeof(buffer)
+    );
+
+    glColor3f(1, 1, 1); // cor branca
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(2, GL_FLOAT, 16, buffer);
+    glDrawArrays(GL_QUADS, 0, num_quads * 4);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glPopMatrix();
 }

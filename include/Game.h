@@ -32,7 +32,7 @@ struct Config {
     bool gameStart = false;
     bool gameOver = false;
     float gameSpeed = 1.0f;
-    float timeSpeed = 0.1f;
+    float timeSpeed = 0.08f;
 };
 
 class Game {
@@ -50,6 +50,8 @@ public:
     static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
     static bool snakeEatedFood();
     static void resetGame();
+    static void drawScore();
+    static void drawRank();
     [[nodiscard]] static Config getConfig() {
       return config;
     }
